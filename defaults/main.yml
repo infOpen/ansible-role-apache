@@ -16,6 +16,11 @@ apache_datadir : /srv/data/www
 apache_logdir  : /var/log/apache2
 apache_ssldir  : /srv/data/www-ssl
 
+# Default file names
+apache_main_file     : "apache2.conf"
+apache_envvars_file  : "envvars"
+apache_security_file : "security.conf"
+
 # Modules management
 apache_modules_disabled :
   - autoindex
