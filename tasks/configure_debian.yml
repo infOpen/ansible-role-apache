@@ -1,6 +1,7 @@
 ---
 
 - name : generate main config file
+  become : True
   template :
     src   : "{{ item }}"
     dest  : /etc/apache2/apache2.conf
@@ -15,6 +16,7 @@
 
 
 - name : generate envvars config file
+  become : True
   template :
     src   : "{{ item }}"
     dest  : /etc/apache2/envvars
@@ -29,6 +31,7 @@
 
 
 - name : create configuration management if not exists - available
+  become : True
   file :
     path  : "{{ item }}"
     state : directory
@@ -41,6 +44,7 @@
 
 
 - name : generate security.conf config file
+  become : True
   template :
     src   : "{{ item }}"
     dest  : /etc/apache2/conf-available/security.conf
@@ -55,6 +59,7 @@
 
 
 - name : check security configuration activated
+  become : True
   file :
     src   : /etc/apache2/conf-available/security.conf
     dest  : /etc/apache2/conf-enabled/security.conf
@@ -62,6 +67,7 @@
 
 
 - name : disable some modules
+  become : True
   apache2_module :
     name  : "{{ item }}"
     state : absent
@@ -71,6 +77,7 @@
 
 
 - name : enable some modules
+  become : True
   apache2_module :
     name  : "{{ item }}"
     state : present
@@ -80,6 +87,7 @@
 
 
 - name : generate virtualhost files
+  become : True
   template :
     src   : "{{ role_path }}/templates/vhost.conf.j2"
     dest  : "/etc/apache2/sites-available/{{ item.server_file_name }}.conf"
@@ -91,6 +99,7 @@
 
 
 - name : copy SSL key if exists
+  become : True
   copy :
     src   : "{{ inventory_dir }}/files/{{ item.1.key_file }}"
     dest  : "{{ apache_ssldir }}/{{ item.1.key_file | basename }}"
@@ -105,6 +114,7 @@
 
 
 - name : copy SSL cert if exists
+  become : True
   copy :
     src   : "{{ inventory_dir }}/files/{{ item.1.cert_file }}"
     dest  : "{{ apache_ssldir }}/{{ item.1.cert_file | basename }}"
@@ -120,6 +130,7 @@
 
 
 - name : copy SSL chain if exists
+  become : True
   copy :
     src   : "{{ inventory_dir }}/files/{{ item.1.chain_file }}"
     dest  : "{{ apache_ssldir }}/{{ item.1.chain_file | basename }}"
@@ -134,6 +145,7 @@
 
 
 - name  : disable apache sites
+  become : True
   shell :
     "a2dissite {{ item }}"
   register     : apache_dissite
@@ -143,6 +155,7 @@
 
 
 - name  : enable apache sites
+  become : True
   shell :
     "a2ensite {{ item }}"
   register     : apache_ensite
@@ -152,9 +165,11 @@
 
 
 - name : generate logrotate
+  become : True
   template :
     src   : "{{ role_path }}/templates/logrotate.j2"
     dest  : "/etc/logrotate.d/apache2"
     owner : root
     group : root
     mode  : 0644
+
