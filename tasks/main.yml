@@ -12,6 +12,7 @@
   when: ansible_os_family == "Debian"
 
 - name : create data directory
+  become : True
   file :
     path  : "{{ apache_datadir }}"
     group : www-data
@@ -21,6 +22,7 @@
 
 
 - name : create SSL directory
+  become : True
   file :
     path  : "{{ apache_ssldir }}"
     group : www-data
@@ -33,3 +35,4 @@
     - config
     - apache
   when: ansible_os_family == "Debian"
+
