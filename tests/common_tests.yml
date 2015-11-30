@@ -8,5 +8,6 @@
   command: "service {{ apache_service_name }} status"
   when: "ansible_os_family == 'Debian'"
   changed_when: False
-  failed_when: "'apache2 is running' not in apache_test_service_state.stdout"
+  failed_when: "'apache2 is running'
+    not in (apache_test_service_state.stdout | lower)"
 
