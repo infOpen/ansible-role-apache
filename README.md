@@ -1,20 +1,17 @@
-apache
-======
+# apache
 
 [![Build Status](https://travis-ci.org/infOpen/ansible-role-apache.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-apache)
 
 Install apache package.
 
-Requirements
-------------
+## Requirements
 
 This role requires Ansible 1.4 or higher, and platform requirements are listed
 in the metadata file.
 
-Role Variables
---------------
+## Role Variables
 
-Default role variables
+### Default role variables
 
     # Package variables
     #------------------
@@ -118,25 +115,28 @@ Default role variables
       - "+HIGH"
       - "+MEDIUM"
 
-Dependencies
-------------
+### Debian specific vars
+
+    apache_packages :
+      - apache2
+
+    apache_service_name: apache2
+
+## Dependencies
 
 None
 
-Example Playbook
-----------------
+## Example Playbook
 
     - hosts: servers
       roles:
          - { role: achaussier.apache }
 
-License
--------
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro
