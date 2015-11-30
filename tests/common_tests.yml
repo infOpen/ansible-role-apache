@@ -1,0 +1,12 @@
+---
+
+# Common tests to Travis and Vagrant
+
+- name: Check service is started
+  become: True
+  register: apache_test_service_state
+  service:
+    name: "{{ apache_service_name }}"
+    state: started
+  failed_when: "apache_test_service_state.changed"
+
