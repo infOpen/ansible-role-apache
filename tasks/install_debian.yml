@@ -11,3 +11,12 @@
   notify :
     - restart apache
 
+- name : stop service on precise before config change
+  become: True
+  service :
+    name : "{{ apache_service_name }}"
+    state : stopped
+  notify :
+    - restart apache
+  when : ansible_distribution_release == 'precise'
+
