@@ -171,18 +171,36 @@ Include ports.conf
 <Directory />
     Options FollowSymLinks
     AllowOverride None
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
 </Directory>
 
 <Directory /usr/share>
     AllowOverride None
-    Require all granted
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
 </Directory>
 
 <Directory /var/www/>
     Options Indexes FollowSymLinks
     AllowOverride None
-    Require all granted
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
 </Directory>
 
 #<Directory /srv/>
@@ -205,7 +223,13 @@ AccessFileName .htaccess
 # viewed by Web clients.
 #
 <FilesMatch "^\.ht">
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 

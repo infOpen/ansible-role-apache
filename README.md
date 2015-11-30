@@ -4,6 +4,10 @@
 
 Install apache package.
 
+By default, this role disable default site, and it's normal to have :
+- a 403 by default for apache 2.2
+- a 404 by default for apache 2.4
+
 ## Requirements
 
 This role requires Ansible 1.4 or higher, and platform requirements are listed

@@ -11,3 +11,8 @@
   failed_when: "'apache2 is running'
     not in (apache_test_service_state.stdout | lower)"
 
+- name:  Check apache service is running
+  uri:
+    url: "http://127.0.0.1"
+    status_code: "403,404"
+
