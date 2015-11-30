@@ -6,4 +6,4 @@
   service:
     name  : "{{ apache_service_name }}"
     state : restarted
-  when : apache_service_state != "stopped"
+
