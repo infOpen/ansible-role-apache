@@ -73,8 +73,11 @@
 #
 # The accept serialization lock file MUST BE STORED ON A LOCAL DISK.
 #
+{% if ansible_distribution_release == 'precise' %}
+LockFile ${APACHE_LOCK_DIR}/accept.lock
+{% else %}
 Mutex file:${APACHE_LOCK_DIR} default
-
+{% endif %}
 #
 # PidFile: The file in which the server should record its process
 # identification number when it starts.
@@ -147,8 +150,13 @@ ErrorLog ${APACHE_LOG_DIR}/error.log
 LogLevel {{ apache_log_level | join(' ') }}
 
 # Include module configuration:
+{% if ansible_distribution_release == 'precise' %}
+Include mods-enabled/*.load
+Include mods-enabled/*.conf
+{% else %}
 IncludeOptional mods-enabled/*.load
 IncludeOptional mods-enabled/*.conf
+{% endif %}
 
 # Include list of ports to listen on
 Include ports.conf
@@ -163,18 +171,36 @@ Include ports.conf
 <Directory />
     Options FollowSymLinks
     AllowOverride None
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
 </Directory>
 
 <Directory /usr/share>
     AllowOverride None
-    Require all granted
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
 </Directory>
 
 <Directory /var/www/>
     Options Indexes FollowSymLinks
     AllowOverride None
-    Require all granted
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Allow from all
+    </IfModule>
 </Directory>
 
 #<Directory /srv/>
@@ -197,7 +223,13 @@ AccessFileName .htaccess
 # viewed by Web clients.
 #
 <FilesMatch "^\.ht">
-    Require all denied
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
 
@@ -223,9 +255,17 @@ LogFormat "%{User-agent}i" agent
 # see README.Debian for details.
 
 # Include generic snippets of statements
+{% if ansible_distribution_release == 'precise' %}
+Include conf.d/
+{% else %}
 IncludeOptional conf-enabled/*.conf
+{% endif %}
 
 # Include the virtual host configurations:
+{% if ansible_distribution_release == 'precise' %}
+Include sites-enabled/
+{% else %}
 IncludeOptional sites-enabled/*.conf
+{% endif %}
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet
